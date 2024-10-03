@@ -1,44 +1,55 @@
-/*import {
-createSlice,
-PayloadAction
+import {
+  ActionReducerMapBuilder,
+  createAsyncThunk,
+  createSlice
 } from "@reduxjs/toolkit";
-  
-const initialState: Cart = {
-  items: [],
-  total: 0,
-}
+import axios from "axios";
+import { Pokemon } from "../../types/pokemonDetail"
+import { LOCAL_STORAGE_KEY } from "../../constants/Names";
 
-const cartSlice = createSlice({
-  name: "cart",
-  initialState,
-  reducers: {
-    addItem: (state, action: PayloadAction<Product>) => {
-      const existingitem = state.items.find((item) => item.product.name === action.payload.name);
-      if (existingitem) {
-        existingitem.quantity += 1;
-      } else {
-        state.items.push({product: action.payload, quantity: 1});
-      }
-      state.total = calculateTotal(state.items);
-    },
-    removeItem: (state, action: PayloadAction<Product>) => {
-      const index = state.items.findIndex((item) => item.product.name === action.payload.name);
-      if (index !== -1) {
-        state.items[index].quantity -= 1;
-        if (state.items[index].quantity === 0) {
-          state.items.splice(index, 1);
-        }
-        state.total = calculateTotal(state.items);
-      }
+export const fetchList = createAsyncThunk("pokemon/fetchList", async () => {
+  const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+  if (storedData && storedData.length > 0) {
+    const parsedData = JSON.parse(storedData) as Pokemon[];
+    return parsedData.slice(0, 20)
+  } else {
+    const { data, status } = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=1302');
+    if (status !== 200) {
+      throw new Error("Failed to fetch pokemon list");
     }
+    const parsedData: Pokemon[] = data.results;
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(parsedData));
+    return parsedData.slice(0, 20);
   }
 });
 
-// Export the action creators
-export const {
-  addItem,
-  removeItem
-} = cartSlice.actions;
+interface PokemonListState {
+  pokemons: Pokemon[];
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null | undefined;
+}
 
-// Export the reducer
-export default cartSlice.reducer;*/
+const initialState: PokemonListState = {
+  pokemons: [],
+  status: "idle",
+  error: null,
+};
+
+const pokemonListSlice = createSlice({
+  name: "pokemon list",
+  initialState,
+  reducers: {},
+  extraReducers: (builder: ActionReducerMapBuilder<PokemonListState>) => {
+    builder.addCase(fetchList.pending, (state) => {
+      state.status = "loading";
+    }).addCase(fetchList.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      state.pokemons = action.payload;
+    }).addCase(fetchList.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = action.error.message;
+    });
+  }
+});
+
+export default pokemonListSlice.reducer;

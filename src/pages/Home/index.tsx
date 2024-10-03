@@ -1,15 +1,24 @@
-import { FC, useState, useContext } from 'react'
+import { FC, useState, useEffect } from 'react'
 import { cn } from '../../utils';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import { faSearch, faSquare, faBorderAll } from '@fortawesome/free-solid-svg-icons';
 import PokemonContainer from '../../componenents/PokemonContainer';
-import { PokemonListContext } from '../../context/PokemonListContext';
+import { fetchList } from '../../features/pokemonList/pokemonListSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/useSelector';
 
 const Home: FC = () => {
+  const dispatch = useAppDispatch();
+  const { pokemons, error, status } = useAppSelector(state => state.pokemonList);
   //const [filterText, setFilterText] = useState<string>("");
-  const [isGrid, setIsGrid] = useState(false);
-  const { loading, error, pokemonList } = useContext(PokemonListContext);
   
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchList());
+    }
+  }, [dispatch, status]);
+
+  const [isGrid, setIsGrid] = useState(false);
+
   return (
     <div className='w-full min-h-svh flex flex-col bg-dark-grey'>
         <div className='flex justify-between items-center  border-b-2 
@@ -42,19 +51,19 @@ const Home: FC = () => {
             </div>
           </div>
             {
-              loading ? (
+              status === "idle" || status === "loading" ? (
                 <div className='flex h-96 justify-center items-center text-center text-light-grey'>
                   <div>Loading...</div>
                 </div>) :
               error ? (<div className='flex h-96 justify-center items-center text-center text-light-grey'>
-                  <div>Failed to fetch Pokémon :(</div>
+                  <div>{error} :(</div>
                 </div>) :
               (
                 <div className={cn('gap-3 justify-center items-center', 
                                   isGrid ? 'grid grid-cols-2 p-3' : 'flex flex-col p-6')}>
-                {pokemonList.map((pokemon, key) => (
-                  <PokemonContainer key={key} pokemon={pokemon} isGrid={isGrid} />
-                ))}
+                { pokemons.map((value, key) => (
+                    <PokemonContainer key={key} pokemon={value} isGrid={isGrid} />
+                )) }
                 </div>
               )
             }

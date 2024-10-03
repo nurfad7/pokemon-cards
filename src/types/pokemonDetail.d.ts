@@ -1,4 +1,4 @@
-interface PokemonDetails {
+export interface PokemonDetail {
   name: string;
   id: number;
   health: number;
@@ -6,4 +6,10 @@ interface PokemonDetails {
   defense: number;
   spriteFront: string;
   artworkFront: string;
+  type: string;
+}
+
+export interface Pokemon {
+  name: string;
+  link: string;
 }
