@@ -14,3 +14,21 @@ html, body {
   width: 100vw;
   overflow-x: hidden;
 }
+.text-type-normal { color: #A8A77A; }
+.text-type-fire { color: #EE8130; }
+.text-type-water { color: #6390F0; }
+.text-type-electric { color: #F7D02C; }
+.text-type-grass { color: #7AC74C; }
+.text-type-ice { color: #96D9D6; }
+.text-type-fighting { color: #C22E28; }
+.text-type-poison { color: #A33EA1; }
+.text-type-ground { color: #E2BF65; }
+.text-type-flying { color: #A98FF3; }
+.text-type-psychic { color: #F95587; }
+.text-type-bug { color: #A6B91A; }
+.text-type-rock { color: #B6A136; }
+.text-type-ghost { color: #735797; }
+.text-type-dragon { color: #6F35FC; }
+.text-type-dark { color: #705746; }
+.text-type-steel { color: #B7B7CE; }
+.text-type-fairy { color: #D685AD; }

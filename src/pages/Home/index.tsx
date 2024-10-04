@@ -66,6 +66,9 @@ const Home: FC = () => {
                 <option value="" disabled>Sort by</option>
                 <option value="type">Type</option>
                 <option value="name">Name</option>
+                <option value="health">Health</option>
+                <option value="attack">Attack</option>
+                <option value="defense">Defense</option>
               </select>
             </div>
             <div className='w-1/4 grid grid-cols-2'>

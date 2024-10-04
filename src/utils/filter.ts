@@ -19,7 +19,9 @@ export const sortPokemon = (pokemons: Pokemon[], filter: string): Pokemon[] => {
         ))
       }
       break;
-    case "hp" :
+    case "health"  :
+    case "attack"  :
+    case "defense" :
       {
         pokemons = pokemons.sort((a, b) => (getNumberSort(b, filter) - (getNumberSort(a, filter))))
       }
@@ -64,7 +66,9 @@ const getNumberSort = (pokemon: Pokemon, typeSort: string): number => {
 const getNumberType = (detail: PokemonDetail | null, typeSort: string): number => {
   if(detail !== null) {
     switch (typeSort) {
-      case "name" : return detail.health;
+      case "health" : return detail.health;
+      case "attack" : return detail.attack;
+      case "defense" : return detail.defense;
       default: return 0;
     }
   } else {

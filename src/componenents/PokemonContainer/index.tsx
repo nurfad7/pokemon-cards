@@ -45,15 +45,19 @@ const PokemonContainer: FC<PokemonContainerProps> = ({isGrid, pokemon}) => {
             <div>{error}</div>
           </div>) :
         (
-          <div>
-            <div className='flex justify-between'>
-                <div className={cn(pokemonDetail?.type ? `text-type-${pokemonDetail?.type}` : `text-type-${detail?.type}`)}>{pokemonDetail?.type || detail?.type}</div>
+          <div className='min-h-32'>
+            {
+              !isGrid && (
+              <div className='flex justify-between' >
+                <div className={pokemonDetail?.type ? `text-type-${pokemonDetail?.type}` : `text-type-${detail?.type}`}>{pokemonDetail?.type || detail?.type}</div>
                 <div className='text-base'>#{pokemonDetail?.id || detail?.id}</div>
-            </div>
+              </div>
+              )
+            }
             <div className={cn('flex justify-center items-center', !isGrid ? 'h-[10.8rem]' : 'h-[5.625rem]')}>
               <img className='h-full aspect-auto' src={pokemonDetail?.artworkFront || detail?.artworkFront} alt="pokemon photo" />
             </div>
-            <div className={cn('text-lg text-center', !isGrid ? 'text-nowrap' : 'text-wrap')}>{pokemon.name}</div>    
+            <div className={cn('text-lg text-center', !isGrid ? 'text-nowrap' : 'leading-none text-wrap')}>{pokemon.name}</div>    
           </div>
         )
       }
