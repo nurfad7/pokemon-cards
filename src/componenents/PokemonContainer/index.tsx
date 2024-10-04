@@ -47,7 +47,7 @@ const PokemonContainer: FC<PokemonContainerProps> = ({isGrid, pokemon}) => {
         (
           <div>
             <div className='flex justify-between'>
-                <div className={cn('text-grass-green')}>{pokemonDetail?.type || detail?.type}</div>
+                <div className={cn(pokemonDetail?.type ? `text-type-${pokemonDetail?.type}` : `text-type-${detail?.type}`)}>{pokemonDetail?.type || detail?.type}</div>
                 <div className='text-base'>#{pokemonDetail?.id || detail?.id}</div>
             </div>
             <div className={cn('flex justify-center items-center', !isGrid ? 'h-[10.8rem]' : 'h-[5.625rem]')}>
